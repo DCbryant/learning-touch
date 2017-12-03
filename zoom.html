@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        .box {
+            width:200px; 
+            height:200px; 
+            background:yellow; 
+            text-align:center; 
+            line-height:200px; 
+            margin: 100px auto 0; 
+            transform: rotate(0deg);
+        }
+    </style>
+</head>
+<body>
+    <div class="box" id="box">2333</div>
+    <script src="http://172.16.152.110:8080/socket.io/socket.io.js"></script>
+    <script>
+
+        const box = document.getElementById('box')
+        
+        box.addEventListener('touchstart',function(e){
+            e.preventDefault()
+            let dis = Math.sqrt(Math.pow(e.targetTouches[0].clientX - e.targetTouches[1].clientX,2)+Math.pow(e.targetTouches[0].clientY - e.targetTouches[1].clientY,2))
+            let w = box.offsetWidth
+            let h = box.offsetHeight
+
+            function fnMove(e){
+                e.preventDefault()
+                if(e.targetTouches.length >= 2){
+                    let dis1 = Math.sqrt(Math.pow(e.targetTouches[0].clientX - e.targetTouches[1].clientX,2)+Math.pow(e.targetTouches[0].clientY - e.targetTouches[1].clientY,2))
+                    box.style.width = dis1 * w / dis
+                    box.style.height = dis1 * h / dis
+                    box.style.lineHeight = dis1 * h / dis
+                }
+            }
+
+            function fnEnd(){
+                box.removeEventListener('touchmove', fnMove, false)
+                box.removeEventListener('touchend', fnEnd, false)
+            }
+
+            if(e.targetTouches.length >= 2){
+                e.preventDefault()
+                box.addEventListener('touchmove',fnMove,false)
+                box.addEventListener('touchend',fnEnd,false)
+            }
+        },false)
+    </script>
+</body>
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        body{
+            height: 3000px;
+        }
+        .box{
+            width: 100px;
+            height: 100px;
+            background-color: #ccc;
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="box" id="box"></div>
+    <script>
+        const box = document.getElementById('box')
+
+        box.addEventListener('touchstart',function(e){
+
+            let disX = e.targetTouches[0].pageX - box.offsetLeft
+            let disY = e.targetTouches[0].pageY - box.offsetTop
+
+            e.cancelBubble = true
+            e.preventDefault()
+
+            function fnEnd(){
+                box.removeEventListener('touchmove',fnMove)
+                box.removeEventListener('touchend',fnMove)
+            }
+
+            function fnMove(e){
+                box.style.left = e.targetTouches[0].pageX - disX + 'px'
+                box.style.top = e.targetTouches[0].pageY - disY + 'px'
+
+                e.preventDefault()
+            }
+
+            box.addEventListener('touchmove',fnMove)
+            box.addEventListener('touchend',fnEnd)
+        })
+    </script>
+</body>
+</html>
